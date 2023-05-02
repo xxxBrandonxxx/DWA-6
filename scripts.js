@@ -83,6 +83,7 @@ for (const book of matches.slice(0, BOOKS_PER_PAGE)) {
 
 
 // Used the Turnery operator in the code
+//
 const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 document.querySelector('[data-settings-theme]').value = isDarkMode ? 'night' : 'day';
 document.documentElement.style.setProperty('--color-dark', isDarkMode ? '255, 255, 255' : '10, 10, 20');
@@ -107,7 +108,7 @@ document.documentElement.style.setProperty('--color-light', isDarkMode ? '10, 10
  * @property {HTMLElement} headerSettings - The element representing the settings icon in the header.
  * @property {HTMLElement} listClose - The element representing the close button in the list overlay.
  */
-
+// Displaying elements of the code:
 /**
  * @type {Elements} 
  */
