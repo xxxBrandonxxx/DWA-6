@@ -43,7 +43,7 @@ for (const book of matches.slice(0, BOOKS_PER_PAGE)) {
 
   
   /*// below i wrapped the code in a function*/
-  function createListItems(starting, genres, authors) {
+ function createListItems(starting, genres, authors) {
     const genreHtml = document.createDocumentFragment()
     const firstGenreElement = document.createElement('option')
     firstGenreElement.value = 'any'
@@ -173,33 +173,49 @@ elements.listClose.addEventListener('click', () => {
 })
 
 
-// Added a Const settings for the form in an object
+// i used the SOLID principles 
 // i Think was a good way of abstraction then you can just call it as a function
-const settingsForm = {
-    form: document.querySelector('[data-settings-form]'),
-    overlay: document.querySelector('[data-settings-overlay]'),
-    addListener: function () {
-        this.form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const { theme } = Object.fromEntries(formData);
-
-            if (theme === 'night') {
-                document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-                document.documentElement.style.setProperty('--color-light', '10, 10, 20');
-            } else {
-                document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-                document.documentElement.style.setProperty('--color-light', '255, 255, 255');
-            }
-
-            this.overlay.open = false;
-        });
+// New class to handle theme changes
+class ThemeManager {
+    static setTheme(theme) {
+      if (theme === 'night') {
+        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
+        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+      } else {
+        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
+        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+      }
     }
-};
+  }
+  
+  // Refactored class to handle form submission and interact with ThemeManager
+  class SettingsForm {
+    constructor(form, overlay) {
+      this.form = form;
+      this.overlay = overlay;
+    }
+  
+    // Moved logic related to theme changes to ThemeManager
+    addListener() {
+      this.form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const { theme } = Object.fromEntries(formData);
+        ThemeManager.setTheme(theme);
+        this.overlay.open = false;
+      });
+    }
+  }
+  
+  // Instantiate SettingsForm object and call addListener() method
+  const settingsForm = new SettingsForm(
+    document.querySelector('[data-settings-form]'),
+    document.querySelector('[data-settings-overlay]')
+  );
 
 // Call addListener() to attach the event listener to the form
 settingsForm.addListener();
-
+  
 
 document.querySelector('[data-search-form]').addEventListener('submit', (event) => {
     event.preventDefault()
